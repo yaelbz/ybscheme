@@ -12,6 +12,7 @@
  */
 
 
+#include <limits.h>
 #include "gtest/gtest.h"
 
 // include directly the cpp files for easy use

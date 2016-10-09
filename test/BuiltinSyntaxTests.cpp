@@ -1,5 +1,5 @@
 /*
- * ReaderTests.cpp
+ * BuiltinSyntaxTests.cpp
  *
  * Use the reader for generating test input data for the evaluator.
  * Not really clean, but easy
@@ -10,6 +10,7 @@
 
 
 #include "gtest/gtest.h"
+#include "TestHelper.h"
 
 // "name-mangling" problem: linking c functions within c++ environment
 extern "C" {
@@ -19,51 +20,18 @@ extern "C" {
 }
 
 
-class BuiltinSyntaxTests: public ::testing::Test {
+class BuiltinSyntaxTests: public ::testing::Test, public TestHelper {
 public:
-	// use this stream/pipe to write to normal stdin (instead of creating own stream)
-	// found at http://stackoverflow.com/questions/4393416/c-need-to-simulate-stdin-within-the-code-when-calling-a-function
-	FILE *stdin_writer;
-
 	// SetUp
 	BuiltinSyntaxTests() {
 		// initialize ybscheme
 		initGlobals();
 		initReader();
 		initEvaluator();
-
-		// prepare a pipe for writing into stdin
-		int p[2];
-		// error return checks omitted
-		pipe(p);
-		dup2(p[0], STDIN_FILENO);
-		stdin_writer = fdopen(p[1], "w");
 	}
 
 	// TearDown
 	~BuiltinSyntaxTests() {
-		fclose(stdin_writer);
-	}
-
-	// wrapper for writing to stdin
-	void write(const char *format, ...) {
-	    va_list args;
-	    va_start(args, format);
-
-		vfprintf(stdin_writer, format, args);
-		fflush(stdin_writer);
-
-		va_end(args);
-	}
-	void writeln(const char *format, ...) {
-	    va_list args;
-	    va_start(args, format);
-
-		vfprintf(stdin_writer, format, args);
-		fprintf(stdin_writer, "\n");
-		fflush(stdin_writer);
-
-		va_end(args);
 	}
 };
 

@@ -7,6 +7,7 @@
 
 
 #include "gtest/gtest.h"
+#include "TestHelper.h"
 
 // "name-mangling" problem: linking c functions within c++ environment
 extern "C" {
@@ -15,50 +16,17 @@ extern "C" {
 }
 
 
-class ReaderTests: public ::testing::Test {
+class ReaderTests: public ::testing::Test, public TestHelper {
 public:
-	// use this stream/pipe to write to normal stdin (instead of creating own stream)
-	// found at http://stackoverflow.com/questions/4393416/c-need-to-simulate-stdin-within-the-code-when-calling-a-function
-	FILE *stdin_writer;
-
 	// SetUp
 	ReaderTests() {
 		// initialize ybscheme
 		initGlobals();
 		initReader();
-
-		// prepare a pipe for writing into stdin
-		int p[2];
-		// error return checks omitted
-		pipe(p);
-		dup2(p[0], STDIN_FILENO);
-		stdin_writer = fdopen(p[1], "w");
 	}
 
 	// TearDown
 	~ReaderTests() {
-		fclose(stdin_writer);
-	}
-
-	// wrapper for writing to stdin
-	void write(const char *format, ...) {
-	    va_list args;
-	    va_start(args, format);
-
-		vfprintf(stdin_writer, format, args);
-		fflush(stdin_writer);
-
-		va_end(args);
-	}
-	void writeln(const char *format, ...) {
-	    va_list args;
-	    va_start(args, format);
-
-		vfprintf(stdin_writer, format, args);
-		fprintf(stdin_writer, "\n");
-		fflush(stdin_writer);
-
-		va_end(args);
 	}
 };
 
