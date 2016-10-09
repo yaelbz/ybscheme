@@ -67,3 +67,91 @@ TEST_F(BuiltinFunctionTests, Plus_20Integers) {
 	EXPECT_TRUE(o->u.number.isInteger);
 	EXPECT_EQ(210, (o->u.number.value.i));
 }
+
+// #### equal #######################################################################################
+
+//-- eq? --//
+
+TEST_F(BuiltinFunctionTests, eqQ_emptyLists) {
+	writeln("(eq? () ())");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalTrue, o);
+}
+
+TEST_F(BuiltinFunctionTests, eqQ_sameValuesAreNotSameObjects) {
+	writeln("(eq? 1 1)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalFalse, o);
+}
+
+TEST_F(BuiltinFunctionTests, eqQ_1ArgReturnsError) {
+	writeln("(eq? 5)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(T_ERROR, TYPE(o));
+}
+
+TEST_F(BuiltinFunctionTests, eqQ_3ArgsReturnError) {
+	writeln("(eq? 6 7 8)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(T_ERROR, TYPE(o));
+}
+
+//-- = --//
+
+TEST_F(BuiltinFunctionTests, eqOpQ_sameValues) {
+	writeln("(= 1 1)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalTrue, o);
+}
+
+TEST_F(BuiltinFunctionTests, eqOpQ_diffValues) {
+	writeln("(= 67 45)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalFalse, o);
+}
+
+TEST_F(BuiltinFunctionTests, eqOpQ_sameStringsReturnsError) {
+	//= works only for numbers
+	writeln("(= \"string1\" \"string1\")");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(T_ERROR, TYPE(o));
+}
+
+TEST_F(BuiltinFunctionTests, eqOpQ_1ArgReturnsError) {
+	writeln("(= 5)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(T_ERROR, TYPE(o));
+}
+
+TEST_F(BuiltinFunctionTests, eqOpQ_3ArgsReturnError) {
+	writeln("(= 6 7 8)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(T_ERROR, TYPE(o));
+}
