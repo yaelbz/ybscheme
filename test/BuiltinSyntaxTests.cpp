@@ -122,3 +122,17 @@ TEST_F(BuiltinSyntaxTests, If_WorksWith2ArgsFalse) {
 
 	EXPECT_EQ(T_NIL, TYPE(o));
 }
+
+TEST_F(BuiltinSyntaxTests, If_eqOp2Numbers) {
+
+	writeln("(if (= 3 3) 1)");
+
+	OBJ ro = ybRead(stdin);
+	//ybPrint(ro);
+	OBJ o  = ybEval(NULL, ro);
+	//ybPrint(o);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(1, (o->u.number.value.i));
+}
