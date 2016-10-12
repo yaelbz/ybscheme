@@ -169,6 +169,15 @@ TEST_F(BuiltinFunctionTests, eqOp_sameStringsReturnsError) {
 	EXPECT_EQ(T_ERROR, TYPE(o));
 }
 
+TEST_F(BuiltinFunctionTests, eqOp_numberAndAdditionAreEqual) {
+	writeln("(= 5 (+ 2 3))");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalTrue, o);
+}
+
 TEST_F(BuiltinFunctionTests, eqOp_1ArgReturnsError) {
 	writeln("(= 5)");
 
@@ -236,3 +245,32 @@ TEST_F(BuiltinFunctionTests, eqvQ_1ArgReturnsError) {
 
 
 //-- equal? --//
+
+// #### not #######################################################################################
+
+TEST_F(BuiltinFunctionTests, not_trueReturnsFalse) {
+	writeln("(not #t)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalFalse, o);
+}
+
+TEST_F(BuiltinFunctionTests, not_falseReturnsTrue) {
+	writeln("(not #f)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalTrue, o);
+}
+
+TEST_F(BuiltinFunctionTests, not_eqOpSameNumbersReturnsFalse) {
+	writeln("(not (= 5 5))");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(globalFalse, o);
+}
