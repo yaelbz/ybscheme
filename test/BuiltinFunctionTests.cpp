@@ -274,3 +274,32 @@ TEST_F(BuiltinFunctionTests, not_eqOpSameNumbersReturnsFalse) {
 
 	EXPECT_EQ(globalFalse, o);
 }
+
+// #### cons / car / cdr #######################################################################################
+
+
+TEST_F(BuiltinFunctionTests, cons_newCons) {
+	writeln("(cons 1 2)");
+
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	EXPECT_EQ(T_CONS, TYPE(o));
+}
+
+TEST_F(BuiltinFunctionTests, cons_defConsAndReturnItsCar) {
+	writeln("(define newCons (cons 1 2))");
+	OBJ ro = ybRead(stdin);
+	OBJ o = ybEval(NULL, ro);
+
+	writeln("(car newCons)");
+	ro = ybRead(stdin);
+	//ybPrint(ro);
+	o  = ybEval(NULL, ro);
+	//ybPrint(o);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(1, (o->u.number.value.i));
+}
+
