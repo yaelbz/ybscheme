@@ -7,6 +7,7 @@
 
 
 #include "gtest/gtest.h"
+#include "limits.h"
 #include "TestHelper.h"
 
 // "name-mangling" problem: linking c functions within c++ environment
@@ -23,19 +24,21 @@ public:
 		// initialize ybscheme
 		initGlobals();
 		initReader();
+		flushReaderInputStream();
 	}
 
 	// TearDown
 	~ReaderTests() {
+		flushReaderInputStream();
 	}
 };
 
 
 
 
-// #### Test Numbers ###############################################################################
+// #### Integer ####################################################################################
 
-TEST_F(ReaderTests, ReadIntegerMin) {
+TEST_F(ReaderTests, IntegerMin) {
 
 	const long i = LONG_MIN;
 	writeln("%ld", i);
@@ -48,43 +51,188 @@ TEST_F(ReaderTests, ReadIntegerMin) {
 	EXPECT_EQ(i, (o->u.number.value.i));
 }
 
-TEST_F(ReaderTests, ReadIntegerMax) {
+TEST_F(ReaderTests, IntegerMax) {
 
 	const long i = LONG_MAX;
 	writeln("%ld", i);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_NUMBER, TYPE(o));
 	EXPECT_TRUE(o->u.number.isInteger);
 	EXPECT_EQ(i, (o->u.number.value.i));
 }
 
-TEST_F(ReaderTests, ReadIntegerNull) {
+TEST_F(ReaderTests, IntegerPositive) {
+
+	const long i = 7625348;
+	writeln("%ld", i);
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerNull) {
 	const long i = 0;
 	writeln("%ld", i);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_NUMBER, TYPE(o));
 	EXPECT_TRUE(o->u.number.isInteger);
 	EXPECT_EQ(i, (o->u.number.value.i));
 }
 
-TEST_F(ReaderTests, ReadIntegerPositivePlus) {
+TEST_F(ReaderTests, IntegerPositiveWithPlus) {
 
-	const long i = LONG_MAX;
+	const long i = 987654;
 	writeln("+%ld", i);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_NUMBER, TYPE(o));
 	EXPECT_TRUE(o->u.number.isInteger);
 	EXPECT_EQ(i, (o->u.number.value.i));
 }
+
+// #### Hexadecimal ################################################################################
+
+TEST_F(ReaderTests, IntegerHexNull) {
+
+	const long i = 0;
+	writeln("#x0");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexNullWithPlus) {
+
+	const long i = 0;
+	writeln("#x+0");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexNullWithMinus) {
+
+	const long i = 0;
+	writeln("#x-0");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexLowercase) {
+
+	const long i = 0xC0FFEE;
+	writeln("#xc0ffee");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexPositive) {
+
+	const long i = 0x1ABCDEF0;
+	writeln("#x1ABCDEF0");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexPositiveWithPlus) {
+
+	const long i = 0xAFFE;
+	writeln("#x+AFFE");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexNegative) {
+
+	const long i = -0xCAFE;
+	writeln("#x-CAFE");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexMax32bit) {
+
+	const long i = 0x7FFFFFFF;
+	writeln("#x7FFFFFFF");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexMin32bit) {
+
+	const long i = -0x7FFFFFFF;
+	writeln("#x-7FFFFFFF");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexMax64bit) {
+
+	const long i = 0x7FFFFFFFFFFFFFFF;
+	writeln("#x7FFFFFFFFFFFFFFF");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+
+TEST_F(ReaderTests, IntegerHexMin64bit) {
+
+	const long i = -0x7FFFFFFFFFFFFFFF;
+	writeln("#x-7FFFFFFFFFFFFFFF");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(i, (o->u.number.value.i));
+}
+//*/
+
 
 // #### Test Strings ###############################################################################
 
@@ -94,11 +242,11 @@ TEST_F(ReaderTests, ReadEmptyString) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
 }
+
 
 TEST_F(ReaderTests, ReadValidString) {
 
@@ -106,7 +254,6 @@ TEST_F(ReaderTests, ReadValidString) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
@@ -118,7 +265,6 @@ TEST_F(ReaderTests, ReadLowercaseChars) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
@@ -130,7 +276,6 @@ TEST_F(ReaderTests, ReadUppercaseChars) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
@@ -142,24 +287,22 @@ TEST_F(ReaderTests, ReadDigitChars) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
 }
-
+/*
 TEST_F(ReaderTests, ReadSpecialChars) {
 
 	const char *s = "!$&/()=?[]}+#*'~,.-:_<>|";
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
 }
-
+*/
 TEST_F(ReaderTests, ReadStringWithLeadingWhitespace) {
 
 	char s[100];
@@ -167,7 +310,6 @@ TEST_F(ReaderTests, ReadStringWithLeadingWhitespace) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
@@ -180,7 +322,6 @@ TEST_F(ReaderTests, ReadStringWithWhitespace) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
@@ -193,7 +334,6 @@ TEST_F(ReaderTests, ReadStringWithTrailingWhitespace) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
@@ -231,7 +371,6 @@ TEST_F(ReaderTests, ReadEmptyList) {
 	writeln("()");
 
 	OBJ o = ybRead(stdin);
-	//ybPrint(o);
 
 	EXPECT_EQ(T_NIL, TYPE(o));
 }
@@ -240,15 +379,10 @@ TEST_F(ReaderTests, ReadEmptyList) {
 
 TEST_F(ReaderTests, ReadValidSyntax) {
 
-	// 1. fill stdin with something to parse
 	writeln("(+ 1 2)");
 
-	// 2. read it
 	OBJ o = ybRead(stdin);
-	// debug output
-	//ybPrint(obj);
 
-	// 3. analyse the result
 	EXPECT_EQ(T_CONS,   TYPE(o));
 	EXPECT_EQ(T_SYMBOL, TYPE(FIRST(o)));
 	EXPECT_EQ(T_CONS,   TYPE(REST(o)));
@@ -258,4 +392,114 @@ TEST_F(ReaderTests, ReadValidSyntax) {
 	o = REST(o);
 	EXPECT_EQ(T_NUMBER, TYPE(FIRST(o)));
 	EXPECT_EQ(T_NIL,    TYPE(REST(o)));
+}
+
+// #### Float ######################################################################################
+
+TEST_F(ReaderTests, DISABLED_FloatPositive) {
+
+	double d = 0.6543;
+	writeln("0.6543");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatPositiveWithPlus) {
+
+	double d = 456.3456543;
+	writeln("+456.3456543");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatNegative) {
+
+	double d = -12.234567;
+	writeln("-12.234567");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatNull) {
+
+	double d = 0.0;
+	writeln("0.0");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatNullWithMinus) {
+
+	double d = 0.0;
+	writeln("-0.0");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatNullWithPlus) {
+
+	double d = 0.0;
+	writeln("+0.0");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatNoLeadingZero) {
+
+	double d = 0.4321;
+	writeln(".4321");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatNoLeadingZeroWithPlus) {
+
+	double d = 0.1234321;
+	writeln("+.1234321");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
+}
+
+TEST_F(ReaderTests, DISABLED_FloatNoLeadingZeroWithMinus) {
+
+	double d = -0.098776;
+	writeln("-.098776");
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_FALSE(o->u.number.isInteger);
+	EXPECT_DOUBLE_EQ(d, (o->u.number.value.f));
 }
