@@ -16,8 +16,8 @@
 #include "gtest/gtest.h"
 
 // include directly the cpp files for easy use
-//#include "ReaderTests.cpp"
-//#include "EvaluatorTests.cpp"
+#include "ReaderTests.cpp"
+#include "EvaluatorTests.cpp"
 #include "BuiltinFunctionTests.cpp"
 #include "BuiltinSyntaxTests.cpp"
 

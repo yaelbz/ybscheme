@@ -140,17 +140,74 @@ TEST_F(BuiltinSyntaxTests, lambda_2paramsReturnMult) {
 	EXPECT_EQ(20, (o->u.number.value.i));
 }
 
-// > ((lambda (x y) (list y x)) 1 2)
-// '(2 1)
+//todo lambda with defines
 
 
-// > ((lambda (x [y 5]) (list y x)) 1 2)
-// '(2 1)
+// #### define #######################################################################################
 
-/*
-> (let ([f (lambda (x #:arg y) (list y x))])
-   (list (f 1 #:arg 2)
-         (f #:arg 2 1)))
+// > (define x 10)
+// > x
+// 10
+TEST_F(BuiltinSyntaxTests, define_variable) {
 
-'((2 1) (2 1))
-*/
+	writeln("(define x 10)");
+	OBJ ro = ybRead(stdin);
+	//ybPrint(ro);
+	OBJ o  = ybEval(NULL, ro);
+	//ybPrint(o);
+	EXPECT_EQ(o, globalNil); //todo compare to globalVoid instead of globalNil
+
+	writeln("x");
+	ro = ybRead(stdin);
+	//ybPrint(ro);
+	o  = ybEval(NULL, ro);
+	//ybPrint(o);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(10, (o->u.number.value.i));
+}
+
+// > (define myfunc (lambda (x) x))
+// > (myfunc 5)
+// 5
+TEST_F(BuiltinSyntaxTests, define_AnonymLambdaReturnsParameter) {
+
+	writeln("(define myfunc (lambda (x) x))");
+	OBJ ro = ybRead(stdin);
+	//ybPrint(ro);
+	OBJ o  = ybEval(NULL, ro);
+	//ybPrint(o);
+
+	writeln("(myfunc 5)");
+	ro = ybRead(stdin);
+	//ybPrint(ro);
+	o  = ybEval(NULL, ro);
+	//ybPrint(o);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(5, (o->u.number.value.i));
+}
+
+// > (define (myadd x y z) (+ x y z))
+// > (myadd 1 2 3)
+// 6
+TEST_F(BuiltinSyntaxTests, define_lambdaShort3ParamsReturnsAddition) {
+
+	writeln("(define (myadd x y z) (+ x y z))");
+	OBJ ro = ybRead(stdin);
+	//ybPrint(ro);
+	OBJ o  = ybEval(NULL, ro);
+	//ybPrint(o);
+
+	writeln("(myadd 1 2 3)");
+	ro = ybRead(stdin);
+	//ybPrint(ro);
+	o  = ybEval(NULL, ro);
+	//ybPrint(o);
+
+	EXPECT_EQ(T_NUMBER, TYPE(o));
+	EXPECT_TRUE(o->u.number.isInteger);
+	EXPECT_EQ(6, (o->u.number.value.i));
+}
