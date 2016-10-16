@@ -2,5 +2,6 @@
 
 Test for ybscheme
 
-#Issues
-- eval test use the ybreader. would be neat to test only the eval without using the reader
+##Issues
+- eval test uses the ybreader. would be better to test only the eval without using the reader
+- instead of redirecting stdin use own stream
