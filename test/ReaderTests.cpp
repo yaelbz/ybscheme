@@ -91,6 +91,17 @@ TEST_F(ReaderTests, ReadUppercaseChars) {
 	EXPECT_STREQ(s, o->u.string.string);
 }
 
+TEST_F(ReaderTests, ReadStringWithSemicolon) {
+
+	const char *s = "str;ng";
+	writeln("\"%s\"", s);
+
+	OBJ o = ybRead(stdin);
+
+	EXPECT_EQ(T_STRING, TYPE(o));
+	EXPECT_STREQ(s, o->u.string.string);
+}
+
 TEST_F(ReaderTests, ReadDigitChars) {
 
 	const char *s = "0123456789";
@@ -149,9 +160,7 @@ TEST_F(ReaderTests, ReadStringWithTrailingWhitespace) {
 	EXPECT_STREQ(s, o->u.string.string);
 }
 
-/*
-//TODO: enable when strings are read dynamically
-TEST_F(ReaderTests, DISABLED_ReadLongString) {
+TEST_F(ReaderTests, ReadLongString) {
 
 	const char *s =
 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$&/()=?[]}+#*'~,.-:_<>|\
@@ -172,7 +181,29 @@ TEST_F(ReaderTests, DISABLED_ReadLongString) {
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
 }
-*/
+
+// #### Test symbol #################################################################################
+
+TEST_F(ReaderTests, ReadLongSymbol) {
+
+	const char *s =
+"s0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	writeln("%s", s);
+
+	OBJ o = ybRead(stdin);
+	ybPrint(o);
+
+	EXPECT_EQ(T_SYMBOL, TYPE(o));
+	EXPECT_STREQ(s, o->u.symbol.name);
+}
 
 // #### Test Lists #################################################################################
 
@@ -206,7 +237,7 @@ TEST_F(ReaderTests, ReadValidSyntax) {
 
 
 TEST_F(ReaderTests, massiveSymbolTableUsage) {
-	//TODO: stucks above 11.000, to be analyzed. stream buffer size 64k?
+	//stucks above 11.000, to be analyzed. stream buffer size 64k?
 	const int testtablesize = 11000;
 	write("(");
 	for (int i = 0; i < testtablesize; ++i) {

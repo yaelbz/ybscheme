@@ -51,7 +51,7 @@ TEST_F(EvaluatorTests, EmptyList) {
 }
 
 TEST_F(EvaluatorTests, massiveEvalStackUsage) {
-	//todo: stucks with 10.000, to be analyzed. stream buffer size 64k?
+	//stucks with 10.000, to be analyzed. stream buffer size 64k?
 	const int teststacksize = 20000;
 	// use builtin (+) for testing the eval stack resizing
 	write("(+ ");
