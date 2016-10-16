@@ -10,6 +10,7 @@
 #include "limits.h"
 #include "TestHelper.h"
 
+
 // "name-mangling" problem: linking c functions within c++ environment
 extern "C" {
 #include "reader.h"
@@ -35,203 +36,12 @@ public:
 
 
 
-
 // #### Integer ####################################################################################
+#include "ReaderBinaryTests.cpp"
+#include "ReaderOctalTests.cpp"
+#include "ReaderDecimalTests.cpp"
+#include "ReaderHexadecimalTests.cpp"
 
-TEST_F(ReaderTests, IntegerMin) {
-
-	const long i = LONG_MIN;
-	writeln("%ld", i);
-
-	OBJ o = ybRead(stdin);
-	//ybPrint(o);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerMax) {
-
-	const long i = LONG_MAX;
-	writeln("%ld", i);
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerPositive) {
-
-	const long i = 7625348;
-	writeln("%ld", i);
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerNull) {
-	const long i = 0;
-	writeln("%ld", i);
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerPositiveWithPlus) {
-
-	const long i = 987654;
-	writeln("+%ld", i);
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-// #### Hexadecimal ################################################################################
-
-TEST_F(ReaderTests, IntegerHexNull) {
-
-	const long i = 0;
-	writeln("#x0");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexNullWithPlus) {
-
-	const long i = 0;
-	writeln("#x+0");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexNullWithMinus) {
-
-	const long i = 0;
-	writeln("#x-0");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexLowercase) {
-
-	const long i = 0xC0FFEE;
-	writeln("#xc0ffee");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexPositive) {
-
-	const long i = 0x1ABCDEF0;
-	writeln("#x1ABCDEF0");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexPositiveWithPlus) {
-
-	const long i = 0xAFFE;
-	writeln("#x+AFFE");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexNegative) {
-
-	const long i = -0xCAFE;
-	writeln("#x-CAFE");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexMax32bit) {
-
-	const long i = 0x7FFFFFFF;
-	writeln("#x7FFFFFFF");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexMin32bit) {
-
-	const long i = -0x7FFFFFFF;
-	writeln("#x-7FFFFFFF");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexMax64bit) {
-
-	const long i = 0x7FFFFFFFFFFFFFFF;
-	writeln("#x7FFFFFFFFFFFFFFF");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-
-TEST_F(ReaderTests, IntegerHexMin64bit) {
-
-	const long i = -0x7FFFFFFFFFFFFFFF;
-	writeln("#x-7FFFFFFFFFFFFFFF");
-
-	OBJ o = ybRead(stdin);
-
-	EXPECT_EQ(T_NUMBER, TYPE(o));
-	EXPECT_TRUE(o->u.number.isInteger);
-	EXPECT_EQ(i, (o->u.number.value.i));
-}
-//*/
 
 
 // #### Test Strings ###############################################################################
@@ -393,6 +203,31 @@ TEST_F(ReaderTests, ReadValidSyntax) {
 	EXPECT_EQ(T_NUMBER, TYPE(FIRST(o)));
 	EXPECT_EQ(T_NIL,    TYPE(REST(o)));
 }
+
+
+TEST_F(ReaderTests, massiveSymbolTableUsage) {
+	//TODO: stucks above 11.000, to be analyzed. stream buffer size 64k?
+	const int testtablesize = 11000;
+	write("(");
+	for (int i = 0; i < testtablesize; ++i) {
+		write(" s%x", i);
+	}
+	writeln(")");
+
+	OBJ o = ybRead(stdin);
+
+	int found = 0;
+	while(TYPE(o) == T_CONS) {
+		EXPECT_EQ(T_SYMBOL, TYPE(FIRST(o)));
+		char buf[16];
+		sprintf(buf, "s%x", found);
+		EXPECT_STREQ(buf, FIRST(o)->u.symbol.name);
+		o = REST(o);
+		found++;
+	}
+	EXPECT_EQ(testtablesize, found);
+}
+
 
 // #### Float ######################################################################################
 

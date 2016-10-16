@@ -27,6 +27,7 @@ public:
 
 	void write(const char *, ...);
 	void writeln(const char *, ...);
+	char* bin2str(long);
 };
 
 #endif /* TESTHELPER_H_ */

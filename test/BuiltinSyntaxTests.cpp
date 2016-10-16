@@ -38,7 +38,7 @@ public:
 // #### if #######################################################################################
 
 
-TEST_F(BuiltinSyntaxTests, If_WorksWith3ArgsTrue) {
+TEST_F(BuiltinSyntaxTests, if_worksWith3ArgsTrue) {
 
 	writeln("(if #t 1 2)");
 
@@ -52,7 +52,7 @@ TEST_F(BuiltinSyntaxTests, If_WorksWith3ArgsTrue) {
 	EXPECT_EQ(1, (o->u.number.value.i));
 }
 
-TEST_F(BuiltinSyntaxTests, If_WorksWith3ArgsFalse) {
+TEST_F(BuiltinSyntaxTests, if_worksWith3ArgsFalse) {
 
 	writeln("(if #f 1 2)");
 
@@ -66,7 +66,7 @@ TEST_F(BuiltinSyntaxTests, If_WorksWith3ArgsFalse) {
 	EXPECT_EQ(2, (o->u.number.value.i));
 }
 
-TEST_F(BuiltinSyntaxTests, If_WorksWith2ArgsTrue) {
+TEST_F(BuiltinSyntaxTests, if_worksWith2ArgsTrue) {
 
 	writeln("(if #t 1)");
 
@@ -80,7 +80,7 @@ TEST_F(BuiltinSyntaxTests, If_WorksWith2ArgsTrue) {
 	EXPECT_EQ(1, (o->u.number.value.i));
 }
 
-TEST_F(BuiltinSyntaxTests, If_WorksWith2ArgsFalse) {
+TEST_F(BuiltinSyntaxTests, if_worksWith2ArgsFalse) {
 
 	writeln("(if #f 1)");
 
@@ -92,7 +92,7 @@ TEST_F(BuiltinSyntaxTests, If_WorksWith2ArgsFalse) {
 	EXPECT_EQ(T_NIL, TYPE(o));
 }
 
-TEST_F(BuiltinSyntaxTests, If_eqOp2Numbers) {
+TEST_F(BuiltinSyntaxTests, if_eqOp2Numbers) {
 
 	writeln("(if (= 3 3) 1)");
 
@@ -155,7 +155,7 @@ TEST_F(BuiltinSyntaxTests, define_variable) {
 	//ybPrint(ro);
 	OBJ o  = ybEval(NULL, ro);
 	//ybPrint(o);
-	EXPECT_EQ(o, globalNil); //todo compare to globalVoid instead of globalNil
+	EXPECT_EQ(o, globalVoid);
 
 	writeln("x");
 	ro = ybRead(stdin);

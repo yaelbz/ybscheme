@@ -59,3 +59,39 @@ void TestHelper::writeln(const char *format, ...) {
 
 	va_end(args);
 }
+
+// from: http://www.strudel.org.uk/itoa/
+/*
+char* itoa(int val, int base){
+
+	static char buf[32] = {0};
+
+	int i = 30;
+
+	for(; val && i ; --i, val /= base){
+		buf[i] = "0123456789abcdef"[val % base];
+	}
+
+	return &buf[i+1];
+
+}
+*/
+char* TestHelper::bin2str(long val) {
+	static char buf[65] = {0};
+	int i = 63;
+	char sign = '\0';
+	if(val < 0) {
+		sign = '-';
+		val *= -1;
+	}
+
+	for(; val && i ; --i, val>>=1){
+		buf[i] = (val&1)?'1':'0';
+	}
+
+	if(sign) {
+		buf[i--] = sign;
+	}
+
+	return &buf[i+1];
+}
