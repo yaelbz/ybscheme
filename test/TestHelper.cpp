@@ -2,7 +2,7 @@
  * TestHelper.cpp
  *
  *  Created on: 09.10.2016
- *      Author: martin
+ *      Author: yael
  */
 
 #include <sys/poll.h>
