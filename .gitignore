@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-/Debug/
 =======
 # Compiled Object files
 *.slo
@@ -31,3 +30,6 @@
 *.out
 *.app
 >>>>>>> a0b18c34241202268a721ce97b1116bf8d27aa22
+/Release/
+/Debug/
+/UnitTest/
