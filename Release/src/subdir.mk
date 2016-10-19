@@ -4,15 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-/home/martin/workspace/ybscheme/src/builtins.c \
-/home/martin/workspace/ybscheme/src/environment.c \
-/home/martin/workspace/ybscheme/src/evalStack.c \
-/home/martin/workspace/ybscheme/src/evaluator.c \
-/home/martin/workspace/ybscheme/src/global.c \
-/home/martin/workspace/ybscheme/src/printer.c \
-/home/martin/workspace/ybscheme/src/reader.c \
-/home/martin/workspace/ybscheme/src/symbolTable.c \
-/home/martin/workspace/ybscheme/src/ybscheme.c 
+../src/builtins.c \
+../src/environment.c \
+../src/evalStack.c \
+../src/evaluator.c \
+../src/global.c \
+../src/printer.c \
+../src/reader.c \
+../src/symbolTable.c \
+../src/ybscheme.c 
 
 OBJS += \
 ./src/builtins.o \
@@ -38,66 +38,10 @@ C_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-src/builtins.o: /home/martin/workspace/ybscheme/src/builtins.c
+src/%.o: ../src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/environment.o: /home/martin/workspace/ybscheme/src/environment.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/evalStack.o: /home/martin/workspace/ybscheme/src/evalStack.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/evaluator.o: /home/martin/workspace/ybscheme/src/evaluator.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/global.o: /home/martin/workspace/ybscheme/src/global.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/printer.o: /home/martin/workspace/ybscheme/src/printer.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/reader.o: /home/martin/workspace/ybscheme/src/reader.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/symbolTable.o: /home/martin/workspace/ybscheme/src/symbolTable.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/ybscheme.o: /home/martin/workspace/ybscheme/src/ybscheme.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/martin/workspace/ybscheme/src" -O3 -std=c99 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -I.././src -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

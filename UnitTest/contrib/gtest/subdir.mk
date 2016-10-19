@@ -6,18 +6,18 @@
 CC_SRCS += \
 ../contrib/gtest/gtest-all.cc 
 
-OBJS += \
-./contrib/gtest/gtest-all.o 
-
 CC_DEPS += \
 ./contrib/gtest/gtest-all.d 
+
+OBJS += \
+./contrib/gtest/gtest-all.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 contrib/gtest/%.o: ../contrib/gtest/%.cc
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I"/home/martin/workspace/ybschemeTest/contrib" -I"/home/martin/workspace/ybscheme/src" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	g++ -I../src -I../contrib -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
