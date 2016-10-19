@@ -27,10 +27,10 @@ cleantest:
 
 
 runrelease: buildrelease
-	cd Release && ./ybschemeTest
+	cd Release && ./ybscheme
 
 rundebug: builddebug
-	cd Debug && ./ybschemeTest
+	cd Debug && ./ybschemeDebug
 
 runtest: buildtest
 	cd UnitTest && ./ybschemeTest
