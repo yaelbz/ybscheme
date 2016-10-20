@@ -9,8 +9,7 @@
 #include "evaluator.h"
 #include "printer.h"
 
-
-int main(){
+int main() {
 
 	printf("Welcome to ybscheme!\n");
 
@@ -19,7 +18,7 @@ int main(){
 	initEvaluator();
 
 	//repl
-	while(1){
+	while (1) {
 		printf("> ");
 		fflush(stdout);
 		//read
@@ -28,7 +27,7 @@ int main(){
 		OBJ evalObj = ybEval(NULL, readObj);
 		//print
 		ybPrint(evalObj);
-		if(TYPE(evalObj) == T_ERROR) {
+		if (TYPE(evalObj) == T_ERROR) {
 			flushReaderInputStream();
 		}
 	}

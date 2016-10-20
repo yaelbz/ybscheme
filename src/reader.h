@@ -15,5 +15,4 @@ void initReader();
 void flushReaderInputStream();
 OBJ ybRead(FILE*);
 
-
 #endif /* READER_H_ */

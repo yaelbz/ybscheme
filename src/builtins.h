@@ -21,12 +21,9 @@ OBJ builtinCons(int);
 OBJ builtinCar(int);
 OBJ builtinCdr(int);
 
-
 OBJ builtinDefine(OBJ, OBJ);
 OBJ builtinIf(OBJ, OBJ);
 OBJ builtinLambda(OBJ, OBJ);
 OBJ builtinQuote(OBJ, OBJ);
-
-
 
 #endif /* BUILTINS_H_ */

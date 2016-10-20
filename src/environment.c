@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #define GLOBALENV_INITIAL_SIZE 511
 
 void globalEnvAdd(OBJ, OBJ);
@@ -17,11 +16,10 @@ OBJ globalEnv;
 
 // #### init #######################################################################################
 
-
 //------------------------
 // init
 //------------------------
-void initEnv(){
+void initEnv() {
 	//printf("env --- initEnv\n");
 
 	globalEnv = newYbEnvironment(GLOBALENV_INITIAL_SIZE, NULL);
@@ -32,17 +30,17 @@ void initEnv(){
 //------------------------
 // rehash global Env
 //------------------------
-void rehashGlobalEnv(){
+void rehashGlobalEnv() {
 	//remember old table
 	OBJ oldGlobalEnv = globalEnv;
 	int oldGlobalEnvSize = globalEnv->u.environment.size;
 	//new globalEnv
-	globalEnv = newYbEnvironment(((oldGlobalEnvSize + 1) * 2) -1, NULL);
+	globalEnv = newYbEnvironment(((oldGlobalEnvSize + 1) * 2) - 1, NULL);
 
 	keyValuePair oldEntry;
 	for (int i = 0; i < oldGlobalEnvSize; ++i) {
 		oldEntry = oldGlobalEnv->u.environment.entries[i];
-		if(oldEntry.key != NULL){
+		if (oldEntry.key != NULL) {
 			//add to new env
 			globalEnvAdd(oldEntry.key, oldEntry.value);
 		}
@@ -55,25 +53,26 @@ void rehashGlobalEnv(){
 //------------------------
 // add to hashed environment
 //------------------------
-void globalEnvAdd(OBJ key, OBJ value){
-	if(globalEnv->u.environment.entryCount > (globalEnv->u.environment.size * 3 / 4)){
+void globalEnvAdd(OBJ key, OBJ value) {
+	if (globalEnv->u.environment.entryCount
+			> (globalEnv->u.environment.size * 3 / 4)) {
 		rehashGlobalEnv();
 	}
 
-	int startIndex = (long)key % globalEnv->u.environment.size;
+	int startIndex = (long) key % globalEnv->u.environment.size;
 	int searchIndex = startIndex;
 
 	//printf("env --- envAdd 0x%08x\n", startIndex);
 
 	OBJ storedKey;
-	while(1){
+	while (1) {
 		storedKey = globalEnv->u.environment.entries[searchIndex].key;
-		if(storedKey == key){
+		if (storedKey == key) {
 			//key already exists - replace value
 			globalEnv->u.environment.entries[searchIndex].value = value;
 			return;
 		}
-		if(storedKey == NULL){
+		if (storedKey == NULL) {
 			//empty slot - store value
 			globalEnv->u.environment.entries[searchIndex].key = key;
 			globalEnv->u.environment.entries[searchIndex].value = value;
@@ -92,14 +91,13 @@ void globalEnvAdd(OBJ key, OBJ value){
 //------------------------
 // add to local environment
 //------------------------
-void localEnvAdd(OBJ env, OBJ key, OBJ value){
+void localEnvAdd(OBJ env, OBJ key, OBJ value) {
 	for (int i = 0; i < env->u.environment.size; ++i) {
-		if(env->u.environment.entries[i].key == key){
+		if (env->u.environment.entries[i].key == key) {
 			//replace value
 			env->u.environment.entries[i].value = value;
 			return;
-		}
-		else if(env->u.environment.entries[i].key == NULL){
+		} else if (env->u.environment.entries[i].key == NULL) {
 			//empty slot
 			env->u.environment.entries[i].key = key;
 			env->u.environment.entries[i].value = value;
@@ -114,8 +112,8 @@ void localEnvAdd(OBJ env, OBJ key, OBJ value){
 // add to environment
 //
 //------------------------
-void envAdd(OBJ env, OBJ key, OBJ value){
-	if(env == NULL) {
+void envAdd(OBJ env, OBJ key, OBJ value) {
+	if (env == NULL) {
 		globalEnvAdd(key, value);
 	} else {
 		localEnvAdd(env, key, value);
@@ -125,23 +123,22 @@ void envAdd(OBJ env, OBJ key, OBJ value){
 
 // #### get #######################################################################################
 
-
 //------------------------
 // get from hashed environment
 //------------------------
-OBJ globalEnvGet(OBJ key){
+OBJ globalEnvGet(OBJ key) {
 	//printf("env --- envGet:\n");
-	int startIndex = (long)key % globalEnv->u.environment.size;
+	int startIndex = (long) key % globalEnv->u.environment.size;
 	int searchIndex = startIndex;
 
 	OBJ storedKey;
-	while(1){
+	while (1) {
 		storedKey = globalEnv->u.environment.entries[searchIndex].key;
-		if(storedKey == key){
+		if (storedKey == key) {
 			//found
 			return globalEnv->u.environment.entries[searchIndex].value;
 		}
-		if(storedKey == NULL){
+		if (storedKey == NULL) {
 			//key does not exist in env
 			return globalNil;
 			//todo maybe return undefined instead?
@@ -149,18 +146,20 @@ OBJ globalEnvGet(OBJ key){
 		searchIndex = (searchIndex + 1) % globalEnv->u.environment.size;
 		if (searchIndex == startIndex) {
 			//Env full - should not happen. Something went wrong in envAdd()
-			return newYbError("env: searched key not found since mainEnv is full. check envAdd -> rehash");
+			return newYbError(
+					"env: searched key not found since mainEnv is full. check envAdd -> rehash");
 		}
 	}
-	return newYbError("env: searched key not found since mainEnv is full. check envAdd -> rehash");
+	return newYbError(
+			"env: searched key not found since mainEnv is full. check envAdd -> rehash");
 }
 
 //------------------------
 // get from local environment
 //------------------------
-OBJ localEnvGet(OBJ env, OBJ key){
+OBJ localEnvGet(OBJ env, OBJ key) {
 	for (int i = 0; i < env->u.environment.size; ++i) {
-		if(env->u.environment.entries[i].key == key){
+		if (env->u.environment.entries[i].key == key) {
 			//return value
 			return env->u.environment.entries[i].value;
 		}
@@ -172,8 +171,8 @@ OBJ localEnvGet(OBJ env, OBJ key){
 //------------------------
 // get from environment
 //------------------------
-OBJ envGet(OBJ env, OBJ key){
-	if(env == NULL) {
+OBJ envGet(OBJ env, OBJ key) {
+	if (env == NULL) {
 		return globalEnvGet(key);
 	} else {
 		return localEnvGet(env, key);

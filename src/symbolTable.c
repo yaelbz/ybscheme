@@ -19,10 +19,10 @@ static OBJ *symbolTable;
 //------------------------
 // init table
 //------------------------
-void initSymbolTable(){
+void initSymbolTable() {
 	//printf("symbolTable --- init\n");
-	symbolTable = (OBJ*)malloc(sizeof(OBJ)*TABLE_INITIAL_SIZE);
-	memset( (void*)symbolTable, 0, (sizeof(OBJ) * TABLE_INITIAL_SIZE));
+	symbolTable = (OBJ*) malloc(sizeof(OBJ) * TABLE_INITIAL_SIZE);
+	memset((void* )symbolTable, 0, (sizeof(OBJ) * TABLE_INITIAL_SIZE));
 	symbolTableSize = TABLE_INITIAL_SIZE;
 	symbolTableFillSize = 0;
 }
@@ -31,41 +31,40 @@ void initSymbolTable(){
 // hash
 // from: http://www.cse.yorku.ca/~oz/hash.html --> djb2
 //------------------------
-unsigned int hash(char *str)
-{
-    unsigned int hash = 5381;
-    int c;
+unsigned int hash(char *str) {
+	unsigned int hash = 5381;
+	int c;
 
-    while ((c = *str++) != 0) {
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-    }
+	while ((c = *str++) != 0) {
+		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	}
 
-    return hash;
+	return hash;
 }
 
 //------------------------
 // rehash table
 //------------------------
-void rehashSymbolTable(){
+void rehashSymbolTable() {
 	//remember old table
 	OBJ *oldSymbolTable = symbolTable;
 	int oldSymbolTableSize = symbolTableSize;
 	//new symbol table
-	symbolTableSize = ((oldSymbolTableSize + 1) * 2) -1; //next x^2 -1
-	symbolTable = (OBJ*)malloc(sizeof(OBJ)*symbolTableSize);
-	memset( (void*)symbolTable, 0, (sizeof(OBJ) * symbolTableSize));
+	symbolTableSize = ((oldSymbolTableSize + 1) * 2) - 1; //next x^2 -1
+	symbolTable = (OBJ*) malloc(sizeof(OBJ) * symbolTableSize);
+	memset((void* )symbolTable, 0, (sizeof(OBJ) * symbolTableSize));
 
 	OBJ oldSymbol;
 	for (int i = 0; i < oldSymbolTableSize; ++i) {
 		oldSymbol = oldSymbolTable[i];
-		if(oldSymbol != NULL){
+		if (oldSymbol != NULL) {
 			//add to new table
 			int startIndex = hash(oldSymbol->u.symbol.name) % symbolTableSize;
 			int searchIndex = startIndex;
 			OBJ storedSymbol;
-			while(1){
+			while (1) {
 				storedSymbol = symbolTable[searchIndex];
-				if(storedSymbol == NULL){
+				if (storedSymbol == NULL) {
 					//empty slot - add symbol
 					symbolTable[searchIndex] = oldSymbol;
 					break;
@@ -76,7 +75,8 @@ void rehashSymbolTable(){
 
 				if (searchIndex == startIndex) {
 					//no empty slot found
-					ybThrowError(-1, "symbolTable: fatal error. problem with rehash");
+					ybThrowError(-1,
+							"symbolTable: fatal error. problem with rehash");
 				}
 			}
 
@@ -89,9 +89,9 @@ void rehashSymbolTable(){
 //------------------------
 // add to table
 //------------------------
-OBJ addToSymbolTable(char *symbolName){
+OBJ addToSymbolTable(char *symbolName) {
 	//rehash when env 3/4 full
-	if(symbolTableFillSize > (symbolTableSize * 3 / 4)){
+	if (symbolTableFillSize > (symbolTableSize * 3 / 4)) {
 		rehashSymbolTable();
 	}
 
@@ -101,16 +101,16 @@ OBJ addToSymbolTable(char *symbolName){
 	//printf("symbolTable --- getOrAddFromSymbolTable %d\n", startIndex);
 
 	OBJ storedSymbol;
-	while(1){
+	while (1) {
 		storedSymbol = symbolTable[searchIndex];
-		if(storedSymbol == NULL){
+		if (storedSymbol == NULL) {
 			//empty slot - add symbol
 			symbolTable[searchIndex] = newYbSymbol(symbolName);
 			symbolTableFillSize++;
 			//return saved symbol
 			return symbolTable[searchIndex];
 		}
-		if(strcmp(storedSymbol->u.symbol.name, symbolName) == 0) {
+		if (strcmp(storedSymbol->u.symbol.name, symbolName) == 0) {
 			//symbol already exists - return
 			return storedSymbol;
 		}
@@ -122,5 +122,4 @@ OBJ addToSymbolTable(char *symbolName){
 		}
 	}
 }
-
 

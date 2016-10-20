@@ -15,8 +15,8 @@
 //--- types of objects ---//
 
 typedef enum {
-	T_ERROR=-1,				//-1
-	T_NIL=0,				//0
+	T_ERROR = -1,				//-1
+	T_NIL = 0,				//0
 	T_VOID,					//1
 	T_TRUE,					//2
 	T_FALSE,				//3
@@ -28,7 +28,7 @@ typedef enum {
 	T_BUILTIN_SYNTAX,		//9
 	T_USER_FUNCTION,		//10
 	T_ENVIRONMENT,			//11
-}objType;
+} objType;
 
 //--- object definitions ---//
 
@@ -46,10 +46,9 @@ struct ybError {
 };
 
 struct ybNumber {
-	objType type;
-	bool isInteger;
+	objType type;bool isInteger;
 	union {
-		long   i;
+		long i;
 		double f;
 	} value;
 };
@@ -64,11 +63,11 @@ struct ybString {
 	char *string;
 };
 /*
-struct ybBool {
-	objType type;
-	bool value;
-};
-*/
+ struct ybBool {
+ objType type;
+ bool value;
+ };
+ */
 struct ybCons {
 	objType type;
 	OBJ first; //car
@@ -87,7 +86,6 @@ struct ybBuiltinSyntax {
 	ybSyntaxPtr impl; //implementation
 };
 
-
 struct ybUserFunction {
 	objType type;
 	OBJ env;
@@ -101,7 +99,7 @@ struct ybUserFunction {
 typedef struct {
 	OBJ key;
 	OBJ value;
-}keyValuePair;
+} keyValuePair;
 
 typedef struct {
 	objType type;
@@ -111,22 +109,21 @@ typedef struct {
 	keyValuePair entries[]; //Ein Array mit Key-Value-Paaren -> das ist im Prinzip die Env
 } ybEnvironment;
 
-
 //--- general object ---//
 
 struct ybObject {
 	union {
-		struct ybAny    	 any;
-		struct ybError  	 error;
-		struct ybNumber    	 number;
-		struct ybString 	 string;
-		struct ybSymbol 	 symbol;
+		struct ybAny any;
+		struct ybError error;
+		struct ybNumber number;
+		struct ybString string;
+		struct ybSymbol symbol;
 		//struct ybBool		 boolean;
-		struct ybCons   	 cons;
-		struct ybBuiltinFunction  builtinFct;
-		struct ybBuiltinSyntax    builtinSyntax;
-		ybEnvironment             environment;
-		struct ybUserFunction 	userFct;
+		struct ybCons cons;
+		struct ybBuiltinFunction builtinFct;
+		struct ybBuiltinSyntax builtinSyntax;
+		ybEnvironment environment;
+		struct ybUserFunction userFct;
 	} u;
 };
 
@@ -161,12 +158,6 @@ OBJ newYbEnvironment(int, OBJ);
 
 void freeObject(OBJ);
 
-
-
 void ybThrowError(int, const char *, ...);
-
-
-
-
 
 #endif /* GLOBAL_H_ */
