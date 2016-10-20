@@ -176,7 +176,6 @@ TEST_F(ReaderTests, ReadLongString) {
 	writeln("\"%s\"", s);
 
 	OBJ o = ybRead(stdin);
-	ybPrint(o);
 
 	EXPECT_EQ(T_STRING, TYPE(o));
 	EXPECT_STREQ(s, o->u.string.string);
@@ -199,7 +198,6 @@ TEST_F(ReaderTests, ReadLongSymbol) {
 	writeln("%s", s);
 
 	OBJ o = ybRead(stdin);
-	ybPrint(o);
 
 	EXPECT_EQ(T_SYMBOL, TYPE(o));
 	EXPECT_STREQ(s, o->u.symbol.name);

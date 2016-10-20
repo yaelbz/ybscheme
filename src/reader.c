@@ -369,6 +369,11 @@ OBJ ybRead(FILE* inputStream){
 		return ybReadString(inputStream);
 	}
 
+	// simple syntax error
+	if(ch==')'){
+		return newYbError("syntax error: one ) too much");
+	}
+
 	// get number system
 	if(ch == '#') {
 		ch = getNextRelevantChar(inputStream);

@@ -251,9 +251,9 @@ TEST_F(BuiltinFunctionTests, cons_newCons) {
 	writeln("(cons 1 2)");
 
 	OBJ ro = ybRead(stdin);
-	ybPrint(ro);
+	//ybPrint(ro);
 	OBJ o = ybEval(NULL, ro);
-	ybPrint(o);
+	//ybPrint(o);
 
 	EXPECT_EQ(T_CONS, TYPE(o));
 }
