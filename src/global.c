@@ -1,8 +1,6 @@
 /*
  * global.c
  *
- *  Created on: 02.10.2016
- *      Author: yael
  */
 
 #include <stdlib.h>
@@ -17,6 +15,7 @@
 
 //------------------------
 // init global nil, void, true, false
+// init symbol table
 //------------------------
 void initGlobals() {
 	globalNil = (OBJ) (malloc(sizeof(struct ybAny)));

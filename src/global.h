@@ -1,9 +1,5 @@
 /*
  * global.h
- * Für globale Definitionen die von überall zugänglich sind
- *
- *  Created on: 01.09.2016
- *      Author: yael
  *
  */
 
@@ -12,10 +8,10 @@
 
 #include <stdbool.h>
 
-//--- types of objects ---//
+// #### object types #######################################################################################
 
 typedef enum {
-	T_ERROR = -1,				//-1
+	T_ERROR = -1,			//-1
 	T_NIL = 0,				//0
 	T_VOID,					//1
 	T_TRUE,					//2
@@ -30,7 +26,8 @@ typedef enum {
 	T_ENVIRONMENT,			//11
 } objType;
 
-//--- object definitions ---//
+
+// #### object definitions #######################################################################################
 
 typedef struct ybObject *OBJ;
 typedef OBJ (*ybFctPtr)(int); //Function pointer for builtin function
@@ -62,12 +59,14 @@ struct ybString {
 	objType type;
 	char *string;
 };
+
 /*
  struct ybBool {
  objType type;
  bool value;
  };
  */
+
 struct ybCons {
 	objType type;
 	OBJ first; //car
@@ -106,10 +105,11 @@ typedef struct {
 	int size;
 	int entryCount;
 	OBJ parentEnv;
-	keyValuePair entries[]; //Ein Array mit Key-Value-Paaren -> das ist im Prinzip die Env
+	keyValuePair entries[]; //array with key value pairs
 } ybEnvironment;
 
-//--- general object ---//
+
+// #### general object #######################################################################################
 
 struct ybObject {
 	union {
@@ -127,20 +127,23 @@ struct ybObject {
 	} u;
 };
 
-//macro
+
+// #### macros #######################################################################################
+
 #define TYPE(x)      ((x)->u.any.type)
 #define FIRST(x)     ((x)->u.cons.first)
 #define REST(x)      ((x)->u.cons.rest)
 #define IS_TRUE(x)   ((x)->u.any.type == T_TRUE)
 #define IS_FALSE(x)  ((x)->u.any.type == T_FALSE)
 
+
+// #### prototypes #######################################################################################
+
 OBJ globalNil;
 OBJ globalVoid;
 OBJ globalTrue;
 OBJ globalFalse;
 OBJ globalDefine;
-
-// prototypes
 
 void initGlobals();
 

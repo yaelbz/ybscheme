@@ -110,11 +110,10 @@ int getNextRelevantChar(FILE* inputStream) {
 		while (ch != '\n') {
 			ch = getc(inputStream);
 		}
-		// read next relevant char
+		//read next relevant char
 		ch = getc(inputStream);
 	}
 
-//printf("#### relevant: %c\n", isWhitespace(ch)?'_':ch);
 	return ch;
 }
 
@@ -365,12 +364,12 @@ OBJ ybRead(FILE* inputStream) {
 		return ybReadString(inputStream);
 	}
 
-	// simple syntax error
+	//simple syntax error
 	if (ch == ')') {
 		return newYbError("syntax error: one ) too much");
 	}
 
-	// get number system
+	//get number system
 	if (ch == '#') {
 		ch = getNextRelevantChar(inputStream);
 		switch (ch) {
@@ -387,15 +386,15 @@ OBJ ybRead(FILE* inputStream) {
 		case 'f':
 			return globalFalse;
 		default:
-			// no symbol/other type may start with a #
+			//no symbol/other type may start with a #
 			return newYbError("syntax error: invalid token: #%c", ch);
 		}
 	}
 	pushCharBack(ch);
 
-	// default number system is decimal
+	//default number system is decimal
 	OBJ obj = ybReadNumberDecimal(inputStream);
-	// if not a number, this must be a symbol
+	//if not a number, this must be a symbol
 	if (obj == globalNil) {
 		return ybReadSymbol(inputStream);
 	}

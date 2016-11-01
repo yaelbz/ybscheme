@@ -1,8 +1,6 @@
 /*
  * builtins.h
  *
- *  Created on: 03.10.2016
- *      Author: yael
  */
 
 #ifndef BUILTINS_H_

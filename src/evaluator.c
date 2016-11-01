@@ -75,7 +75,6 @@ void initEvaluator() {
 // symbol
 //------------------------
 OBJ ybEvalSymbol(OBJ env, OBJ obj) {
-	//printf("eval --- ybEvalSymbol:\n");
 	OBJ evalObj = envGet(env, obj);
 	//object found
 	if (evalObj)
@@ -88,8 +87,6 @@ OBJ ybEvalSymbol(OBJ env, OBJ obj) {
 // list
 //------------------------
 OBJ ybEvalCons(OBJ env, OBJ obj) {
-	//printf("eval --- ybEvalCons:\n");
-
 	OBJ evaluatedFirst = ybEval(env, FIRST(obj));
 
 	OBJ rest = REST(obj);

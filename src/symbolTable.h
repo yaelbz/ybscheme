@@ -1,8 +1,6 @@
 /*
  * symbolTable.h
  *
- *  Created on: 04.10.2016
- *      Author: yael
  */
 
 #ifndef SYMBOLTABLE_H_

@@ -20,8 +20,6 @@ OBJ globalEnv;
 // init
 //------------------------
 void initEnv() {
-	//printf("env --- initEnv\n");
-
 	globalEnv = newYbEnvironment(GLOBALENV_INITIAL_SIZE, NULL);
 }
 
@@ -47,7 +45,6 @@ void rehashGlobalEnv() {
 	}
 
 	free(oldGlobalEnv);
-
 }
 
 //------------------------
@@ -61,8 +58,6 @@ void globalEnvAdd(OBJ key, OBJ value) {
 
 	int startIndex = (long) key % globalEnv->u.environment.size;
 	int searchIndex = startIndex;
-
-	//printf("env --- envAdd 0x%08x\n", startIndex);
 
 	OBJ storedKey;
 	while (1) {
@@ -104,13 +99,12 @@ void localEnvAdd(OBJ env, OBJ key, OBJ value) {
 			return;
 		}
 	}
-	//should not happen
+	//should not be reached
 	ybThrowError(-1, "fatal error: localEnv full");
 }
 
 //------------------------
 // add to environment
-//
 //------------------------
 void envAdd(OBJ env, OBJ key, OBJ value) {
 	if (env == NULL) {
@@ -127,7 +121,6 @@ void envAdd(OBJ env, OBJ key, OBJ value) {
 // get from hashed environment
 //------------------------
 OBJ globalEnvGet(OBJ key) {
-	//printf("env --- envGet:\n");
 	int startIndex = (long) key % globalEnv->u.environment.size;
 	int searchIndex = startIndex;
 

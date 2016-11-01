@@ -1,8 +1,6 @@
 /*
  * environment.h
  *
- *  Created on: 03.10.2016
- *      Author: yael
  */
 
 #ifndef ENVIRONMENT_H_

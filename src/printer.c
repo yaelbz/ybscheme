@@ -8,10 +8,12 @@
 #include <string.h>
 #include "global.h"
 
+
+// #### print indent #######################################################################################
+
 /*
  * so solls aussehen:
  *
-
 
  cons
  +-int(1)
@@ -32,7 +34,7 @@
 
 void ybPrintIndent(int indentCount, char* prefix, OBJ obj) {
 
-	// String anlegen, der indentCount spaces enthält
+	//string that contains indentCount spaces
 	char* indentString = malloc(indentCount * sizeof(char) + 1);
 	memset(indentString, ' ', indentCount);
 	indentString[indentCount] = '\0';
@@ -43,7 +45,6 @@ void ybPrintIndent(int indentCount, char* prefix, OBJ obj) {
 			printf("%s%serror(%s)\n", indentString, prefix,
 					obj->u.error.message);
 			ybThrowError(1, obj->u.error.message);
-			//fprintf(stderr, "%s\n", obj->u.error.message);
 			break;
 		case T_NIL:
 			printf("%s%snil\n", indentString, prefix);
@@ -93,9 +94,12 @@ void ybPrintIndent(int indentCount, char* prefix, OBJ obj) {
 
 	fflush(stdout);
 
-	// Dynamisch angelegten Speicher wieder freigeben
+	//free momory
 	free(indentString);
 }
+
+
+// #### classic print #######################################################################################
 
 void ybPrintRacketStyle(OBJ obj) {
 	if (obj) {
@@ -159,6 +163,12 @@ void ybPrintRacketStyle(OBJ obj) {
 
 }
 
+// #### main print #######################################################################################
+
+//------------------------
+// main print
+// called from repl
+//------------------------
 void ybPrint(OBJ obj) {
 	//ybPrintIndent(0, "", obj);
 	ybPrintRacketStyle(obj);

@@ -1,9 +1,6 @@
 /*
  * reader.h
- * Definitionen vom reader
  *
- *  Created on: 01.09.2016
- *      Author: yael
  */
 
 #ifndef READER_H_

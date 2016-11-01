@@ -178,7 +178,7 @@ OBJ builtinEqualOperator(int numArgs) {
 		}
 	}
 
-	//frage was wenn ein objekt int ist und ein objekt float ist?
+	//todo handle different types (eg one int and one float)
 
 	return globalFalse;
 }
@@ -213,7 +213,7 @@ OBJ builtinEqvQ(int numArgs) {
 
 	return globalFalse;
 
-	//frage was ist mit anderen Objekttypen?
+	//todo handle other object types
 }
 
 //------------------------
@@ -263,7 +263,6 @@ OBJ builtinCons(int numArgs) {
 	OBJ first = popFromEvalStack();
 
 	return newYbCons(first, rest);
-
 }
 
 //------------------------
@@ -277,7 +276,7 @@ OBJ builtinCar(int numArgs) {
 	if (TYPE(obj) == T_CONS) {
 		return FIRST(obj);
 	}
-	return newYbError("builtin (car); object not a cons");
+	return newYbError("builtin (car): object not a cons");
 }
 
 //------------------------
@@ -291,7 +290,7 @@ OBJ builtinCdr(int numArgs) {
 	if (TYPE(obj) == T_CONS) {
 		return REST(obj);
 	}
-	return newYbError("builtin (cdr); object not a cons");
+	return newYbError("builtin (cdr): object not a cons");
 
 }
 

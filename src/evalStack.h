@@ -1,8 +1,6 @@
 /*
  * evalStack.h
  *
- *  Created on: 03.10.2016
- *      Author: yael
  */
 
 #ifndef EVALSTACK_H_

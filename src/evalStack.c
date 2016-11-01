@@ -12,6 +12,9 @@ OBJ *evalStack;
 int evalStackPointer;
 int evalStackSize;
 
+//------------------------
+// init
+//------------------------
 void initEvalStack() {
 	evalStack = (OBJ*) malloc(sizeof(OBJ) * EVAL_STACK_INITIAL_SIZE);
 	evalStackSize = EVAL_STACK_INITIAL_SIZE;
@@ -19,6 +22,9 @@ void initEvalStack() {
 	evalStackPointer = 0;
 }
 
+//------------------------
+// push
+//------------------------
 void pushToEvalStack(OBJ obj) {
 	if (evalStackPointer >= evalStackSize) {
 		//stack full
@@ -30,6 +36,9 @@ void pushToEvalStack(OBJ obj) {
 	evalStackPointer++;
 }
 
+//------------------------
+// pop
+//------------------------
 OBJ popFromEvalStack() {
 	//if stackPointer = 0 --> stack empty
 	if (evalStackPointer > 0) {

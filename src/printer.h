@@ -1,8 +1,6 @@
 /*
  * printer.h
  *
- *  Created on: 29.09.2016
- *      Author: yael
  */
 
 #ifndef PRINTER_H_

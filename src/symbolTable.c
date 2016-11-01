@@ -1,8 +1,6 @@
 /*
  * symbolTable.c
  *
- *  Created on: 04.10.2016
- *      Author: yael
  */
 
 #include <stdio.h>
@@ -20,7 +18,6 @@ static OBJ *symbolTable;
 // init table
 //------------------------
 void initSymbolTable() {
-	//printf("symbolTable --- init\n");
 	symbolTable = (OBJ*) malloc(sizeof(OBJ) * TABLE_INITIAL_SIZE);
 	memset((void* )symbolTable, 0, (sizeof(OBJ) * TABLE_INITIAL_SIZE));
 	symbolTableSize = TABLE_INITIAL_SIZE;
@@ -97,8 +94,6 @@ OBJ addToSymbolTable(char *symbolName) {
 
 	int startIndex = hash(symbolName) % symbolTableSize;
 	int searchIndex = startIndex;
-
-	//printf("symbolTable --- getOrAddFromSymbolTable %d\n", startIndex);
 
 	OBJ storedSymbol;
 	while (1) {
